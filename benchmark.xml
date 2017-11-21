@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<benchmark>
+<!-- Operating system (unix/windows) -->
+
+<operating_system>windows</operating_system>
+
+<!-- Description of configurations to test -->
+
+<configuration>
+	<shortname>autoscale</shortname>
+	<scheduler>"storm.autoscale.scheduler.AutoscalePlusScheduler"</scheduler>
+	<balancing>shuffle</balancing>
+	<topology>OpinionMine</topology>
+	<stream>2</stream>
+	<distribution>uniform</distribution>
+	<skew>1.0</skew>
+</configuration>
+<configuration>
+	<shortname>dabs</shortname>
+	<scheduler>"storm.autoscale.scheduler.MonitoredResourceAwareScheduler"</scheduler>
+	<balancing>osg</balancing>
+	<topology>OpinionMine</topology>
+	<stream>2</stream>
+	<distribution>zipf</distribution>
+	<skew>1.5</skew>
+</configuration>
+
+<!-- Settings for each configuration -->
+
+<iteration>
+	<number>2</number>
+	<duration>40000</duration>
+</iteration>
+
+<!-- Cluster info -->
+
+<cluster>
+	<nimbus>127.0.0.1</nimbus>
+	<supervisor>127.0.0.1</supervisor>
+</cluster>
+
+<!-- Database info -->
+
+<database>
+	<host>localhost</host>
+	<name>autoscale</name>
+	<username>roland</username>
+	<password>passwort</password>
+</database>
+</benchmark>

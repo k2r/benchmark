@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<benchmark>
+<!-- Operating system (Unix/Windows) -->
+
+<operating_system>windows</operating_system>
+
+<!-- Description of configurations to test -->
+
+<configuration>
+	<shortname>config1</shortname>
+	<scheduler>"storm.autoscale.scheduler.AutoscalePlusScheduler"</scheduler>
+	<balancing>shuffle</balancing>
+	<topology>simpleSensitive</topology>
+	<stream>uneven</stream>
+	<distribution>uniform</distribution>
+	<skew>1.0</skew>
+</configuration>
+<configuration>
+	<shortname>config2</shortname>
+	<scheduler>"storm.autoscale.scheduler.AutoscalePlusScheduler"</scheduler>
+	<balancing>osg</balancing>
+	<topology>simpleSensitive</topology>
+	<stream>uneven</stream>
+	<distribution>zipf</distribution>
+	<skew>1.5</skew>
+</configuration>
+<configuration>
+	<shortname>config3</shortname>
+	<scheduler>"storm.autoscale.scheduler.MonitoredResourceAwareScheduler"</scheduler>
+	<balancing>shuffle</balancing>
+	<topology>simpleSensitive</topology>
+	<stream>uneven</stream>
+	<distribution>zipf</distribution>
+	<skew>1.5</skew>
+</configuration>
+
+<!-- Settings for each configuration -->
+
+<iteration>
+	<number>10</number>
+	<duration>15</duration>
+</iteration>
+
+<!-- Cluster info -->
+
+<cluster>
+	<nimbus>127.0.0.1</nimbus>
+	<supervisor>192.168.0.1</supervisor>
+	<supervisor>192.168.0.2</supervisor>
+	<supervisor>192.168.0.3</supervisor>
+	<supervisor>192.168.0.4</supervisor>
+	<supervisor>192.168.0.5</supervisor>
+	<supervisor>192.168.0.6</supervisor>
+	<supervisor>192.168.0.7</supervisor>
+	<supervisor>192.168.0.8</supervisor>
+	<supervisor>192.168.0.9</supervisor>
+</cluster>
+
+<!-- Database info -->
+
+<database>
+	<host>127.0.0.1</host>
+	<name>autoscale</name>
+	<username>root</username>
+	<password>autoscale</password>
+</database>
+</benchmark>
