@@ -11,6 +11,7 @@ public enum Fields {
 
 	BENCH("benchmark"),
 	OS("operating_system"),
+	BENCHHOME("bench_home"),
 	CONFIG("configuration"),
 	SHNAME("shortname"),
 	SCHED("scheduler"),
@@ -23,7 +24,8 @@ public enum Fields {
 	NBIT("number"),
 	DURIT("duration"),
 	CLUS("cluster"),
-	NIMB("nimbus"),
+	NIMB("nimbus_port"),
+	UI("ui_port"),
 	SUPS("supervisors"),
 	SUP("supervisor"),
 	DB("database"),

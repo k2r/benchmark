@@ -15,6 +15,7 @@ import autoscale.benchmark.util.BufferPrinter;
 public class TopologySubmitter implements Runnable {
 
 	private String os;
+	private String benchHome;
 	private String topology;
 	private String stream;
 	private String loadBalancer;
@@ -23,8 +24,9 @@ public class TopologySubmitter implements Runnable {
 	private final String packageName = "stormBench.stormBench.";
 	private static Logger logger = Logger.getLogger("TopologyManager");
 	
-	public TopologySubmitter(String os, String topology, String stream, String loadBalancer, String distribution, String skew) {
+	public TopologySubmitter(String os, String benchHome, String topology, String stream, String loadBalancer, String distribution, String skew) {
 		this.setOs(os);
+		this.setBenchHome(benchHome);
 		this.setTopology(topology);
 		this.setStream(stream);
 		this.setLoadBalancer(loadBalancer);
@@ -44,6 +46,20 @@ public class TopologySubmitter implements Runnable {
 	 */
 	public final void setOs(String os) {
 		this.os = os;
+	}
+
+	/**
+	 * @return the benchHome
+	 */
+	public String getBenchHome() {
+		return benchHome;
+	}
+
+	/**
+	 * @param benchHome the benchHome to set
+	 */
+	public void setBenchHome(String benchHome) {
+		this.benchHome = benchHome;
 	}
 
 	/**
@@ -121,18 +137,16 @@ public class TopologySubmitter implements Runnable {
 	 */
 	@Override
 	public void run() {
-		File dir = null;
+		File dir = new File(this.getBenchHome());
 		ProcessBuilder builder = null;
 		Process p;
 		try{
 			String os = this.getOs();
 			if(os.equalsIgnoreCase("windows")){
-				dir = new File("C:/These/D3/Github/benchmark/");
 				builder = new ProcessBuilder("cmd", "/C", "storm", "jar", "./benchTopologies.jar", this.packageName + this.getTopology() + "Topology",
 						this.getStream(), this.getLoadBalancer(), this.getDistribution(), this.getSkew());
 			}
 			if(os.equalsIgnoreCase("unix")){
-				dir = new File("/home/ubuntu/");
 				builder = new ProcessBuilder("bash", "./apache-storm-1.0.2/bin/storm", "jar", "./benchTopologies.jar", this.packageName + this.getTopology() + "Topology",
 						this.getStream(), this.getLoadBalancer(), this.getDistribution(), this.getSkew());
 			}

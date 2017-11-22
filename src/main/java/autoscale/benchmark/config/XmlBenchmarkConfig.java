@@ -30,16 +30,18 @@ public class XmlBenchmarkConfig {
 	
 	/*Operating system supporting the benchmark*/
 	private String os;
+	private String benchHome;
 	
 	/*Configurations to run*/
 	private ArrayList<Config> configs;
 	
 	/*Iteration info*/
 	private Integer nbIter;
-	private Integer durationIter;
+	private Integer iterDuration;
 	
 	/*Cluster info*/
-	private String nimbus;
+	private String nimbusPort;
+	private String uiPort;
 	private ArrayList<String> supervisors;
 	
 	/*Database info and credentials*/
@@ -86,6 +88,20 @@ public class XmlBenchmarkConfig {
 	}
 
 	/**
+	 * @return the benchHome
+	 */
+	public String getBenchHome() {
+		return benchHome;
+	}
+
+	/**
+	 * @param benchHome the stormHome to set
+	 */
+	public void setBenchHome(String benchHome) {
+		this.benchHome = benchHome;
+	}
+
+	/**
 	 * @return the configs
 	 */
 	public final ArrayList<Config> getConfigs() {
@@ -113,32 +129,48 @@ public class XmlBenchmarkConfig {
 		this.nbIter = nbIter;
 	}
 
+	
+
 	/**
-	 * @return the durationIter
+	 * @return the iterDuration
 	 */
-	public final Integer getDurationIter() {
-		return durationIter;
+	public Integer getIterDuration() {
+		return iterDuration;
 	}
 
 	/**
-	 * @param durationIter the durationIter to set
+	 * @param iterDuration the iterDuration to set
 	 */
-	public final void setDurationIter(Integer durationIter) {
-		this.durationIter = durationIter;
+	public void setIterDuration(Integer iterDuration) {
+		this.iterDuration = iterDuration;
 	}
 
 	/**
-	 * @return the nimbus
+	 * @return the nimbusPort
 	 */
-	public final String getNimbus() {
-		return nimbus;
+	public String getNimbusPort() {
+		return nimbusPort;
 	}
 
 	/**
-	 * @param nimbus the nimbus to set
+	 * @param nimbusPort the nimbusPort to set
 	 */
-	public final void setNimbus(String nimbus) {
-		this.nimbus = nimbus;
+	public void setNimbusPort(String nimbusPort) {
+		this.nimbusPort = nimbusPort;
+	}
+
+	/**
+	 * @return the uiPort
+	 */
+	public String getUiPort() {
+		return uiPort;
+	}
+
+	/**
+	 * @param uiPort the uiPort to set
+	 */
+	public void setUiPort(String uiPort) {
+		this.uiPort = uiPort;
 	}
 
 	/**
@@ -223,6 +255,8 @@ public class XmlBenchmarkConfig {
 		final Element benchmark = (Element) doc.getElementsByTagName(Fields.BENCH.toString()).item(0);
 		final NodeList os = benchmark.getElementsByTagName(Fields.OS.toString());
 		this.setOs(os.item(0).getTextContent());
+		final NodeList benchHome = benchmark.getElementsByTagName(Fields.BENCHHOME.toString());
+		this.setBenchHome(benchHome.item(0).getTextContent());
 		final NodeList configs =  benchmark.getElementsByTagName(Fields.CONFIG.toString());
 		int nbConfig = configs.getLength();
 		for(int i = 0; i < nbConfig; i++){
@@ -243,10 +277,12 @@ public class XmlBenchmarkConfig {
 		final NodeList nbIter = iteration.getElementsByTagName(Fields.NBIT.toString());
 		this.setNbIter(Integer.parseInt(nbIter.item(0).getTextContent()));
 		final NodeList durIter = iteration.getElementsByTagName(Fields.DURIT.toString());
-		this.setDurationIter(Integer.parseInt(durIter.item(0).getTextContent()));
+		this.setIterDuration(Integer.parseInt(durIter.item(0).getTextContent()));
 		final Element cluster = (Element) doc.getElementsByTagName(Fields.CLUS.toString()).item(0);
 		final NodeList nimbus = cluster.getElementsByTagName(Fields.NIMB.toString());
-		this.setNimbus(nimbus.item(0).getTextContent());
+		this.setNimbusPort(nimbus.item(0).getTextContent());
+		final NodeList ui = cluster.getElementsByTagName(Fields.UI.toString());
+		this.setUiPort(ui.item(0).getTextContent());
 		final NodeList supervisors = cluster.getElementsByTagName(Fields.SUP.toString());
 		int nbSup = supervisors.getLength();
 		for(int i = 0; i < nbSup; i++){

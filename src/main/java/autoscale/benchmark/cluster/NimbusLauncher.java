@@ -16,11 +16,15 @@ import autoscale.benchmark.util.PIDFinder;
 public class NimbusLauncher implements Runnable {
 
 	private String os;
+	private String benchHome;
+	private String nimbusPort;
 	private Process process;
 	private static Logger logger = Logger.getLogger("NimbusLauncher");
 	
-	public NimbusLauncher(String os) {
+	public NimbusLauncher(String os, String benchHome, String nimbusPort) {
 		this.setOs(os);
+		this.setBenchHome(benchHome);
+		this.setNimbusPort(nimbusPort);
 	}
 	
 	/**
@@ -35,6 +39,34 @@ public class NimbusLauncher implements Runnable {
 	 */
 	public void setOs(String os) {
 		this.os = os;
+	}
+
+	/**
+	 * @return the benchHome
+	 */
+	public String getBenchHome() {
+		return benchHome;
+	}
+
+	/**
+	 * @param benchHome the benchHome to set
+	 */
+	public void setBenchHome(String benchHome) {
+		this.benchHome = benchHome;
+	}
+
+	/**
+	 * @return the nimbusPort
+	 */
+	public String getNimbusPort() {
+		return nimbusPort;
+	}
+
+	/**
+	 * @param nimbusPort the nimbusPort to set
+	 */
+	public void setNimbusPort(String nimbusPort) {
+		this.nimbusPort = nimbusPort;
 	}
 
 	/**
@@ -56,11 +88,12 @@ public class NimbusLauncher implements Runnable {
 		Process p = null;
 		try{
 			String os = this.getOs();
+			String pid = PIDFinder.getPID(os, this.getNimbusPort()).toString();
 			if(os.equalsIgnoreCase("windows")){
-				builder = new ProcessBuilder("cmd.exe", "/C", "kill", "-9", PIDFinder.getPID(os, "6627").toString());
+				builder = new ProcessBuilder("cmd.exe", "/C", "kill", "-9", pid);
 			}
 			if(os.equalsIgnoreCase("unix")){
-				builder = new ProcessBuilder("sudo", "kill", "-9", PIDFinder.getPID(os, "6627").toString());
+				builder = new ProcessBuilder("sudo", "kill", "-9", pid);
 			}
 			System.out.println("Stopping the nimbus...");
 			p = builder.start();
@@ -75,17 +108,14 @@ public class NimbusLauncher implements Runnable {
 	 */
 	@Override
 	public void run() {
-		File dir = null;
+		File dir = new File(this.getBenchHome() + "/apache-storm-1.0.2/");
 		ProcessBuilder builder = null;
 		try{
 			String os = this.getOs();
 			if(os.equalsIgnoreCase("windows")){
-				dir = new File("C:/These/D3/Github/benchmark/apache-storm-1.0.2/");
 				builder = new ProcessBuilder("cmd.exe", "/C", "storm", "nimbus");
-				
 			}
 			if(os.equalsIgnoreCase("unix")){
-				dir = new File("/home/ubuntu/apache-storm-1.0.2/");
 				builder = new ProcessBuilder("bash", "./bin/storm", "nimbus");
 			}
 			builder.directory(dir);

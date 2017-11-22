@@ -3,6 +3,7 @@
 <!-- Operating system (Unix/Windows) -->
 
 <operating_system>windows</operating_system>
+<bench_home>C:/These/D3/Github/benchmark-schedulers/</bench_home>
 
 <!-- Description of configurations to test -->
 
@@ -44,7 +45,8 @@
 <!-- Cluster info -->
 
 <cluster>
-	<nimbus>127.0.0.1</nimbus>
+	<nimbus_port>6627</nimbus_port>
+	<ui_port>5371</ui_port>
 	<supervisor>192.168.0.1</supervisor>
 	<supervisor>192.168.0.2</supervisor>
 	<supervisor>192.168.0.3</supervisor>

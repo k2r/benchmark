@@ -13,12 +13,14 @@ import java.util.logging.Logger;
 public class SupervisorLauncher implements Runnable {
 
 	private String os;
+	private String benchHome;
 	private Process process;
 	private ArrayList<String> supervisors;
 	private static Logger logger = Logger.getLogger("SupervisorLauncher");
 	
-	public SupervisorLauncher(String os, ArrayList<String> supervisors) {
+	public SupervisorLauncher(String os, String benchHome, ArrayList<String> supervisors) {
 		this.setOs(os);
+		this.setBenchHome(benchHome);
 		this.setSupervisors(supervisors);
 	}
 	
@@ -34,6 +36,20 @@ public class SupervisorLauncher implements Runnable {
 	 */
 	public void setOs(String os) {
 		this.os = os;
+	}
+
+	/**
+	 * @return the benchHome
+	 */
+	public String getBenchHome() {
+		return benchHome;
+	}
+
+	/**
+	 * @param benchHome the benchHome to set
+	 */
+	public void setBenchHome(String benchHome) {
+		this.benchHome = benchHome;
 	}
 
 	/**

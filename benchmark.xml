@@ -3,6 +3,7 @@
 <!-- Operating system (unix/windows) -->
 
 <operating_system>windows</operating_system>
+<bench_home>C:/These/D3/Github/benchmark-schedulers/trunk/</bench_home>
 
 <!-- Description of configurations to test -->
 
@@ -16,26 +17,27 @@
 	<skew>1.0</skew>
 </configuration>
 <configuration>
-	<shortname>dabs</shortname>
+	<shortname>rstorm</shortname>
 	<scheduler>"storm.autoscale.scheduler.MonitoredResourceAwareScheduler"</scheduler>
-	<balancing>osg</balancing>
+	<balancing>shuffle</balancing>
 	<topology>OpinionMine</topology>
 	<stream>2</stream>
-	<distribution>zipf</distribution>
-	<skew>1.5</skew>
+	<distribution>uniform</distribution>
+	<skew>1.0</skew>
 </configuration>
 
 <!-- Settings for each configuration -->
 
 <iteration>
 	<number>2</number>
-	<duration>40000</duration>
+	<duration>60</duration>
 </iteration>
 
 <!-- Cluster info -->
 
 <cluster>
-	<nimbus>127.0.0.1</nimbus>
+	<nimbus_port>6627</nimbus_port>
+	<ui_port>5371</ui_port>
 	<supervisor>127.0.0.1</supervisor>
 </cluster>
 

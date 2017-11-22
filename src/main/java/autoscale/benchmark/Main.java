@@ -31,15 +31,16 @@ public class Main {
 		XmlBenchmarkConfig benchmark = new XmlBenchmarkConfig("benchmark.xml");
 		benchmark.initParameters();
 		String os = benchmark.getOs();
+		String benchHome = benchmark.getBenchHome();
 		
 		/*Initialize the cluster manager and launch the UI once*/
 		//String nimbus = benchmark.getNimbus();
 		//ArrayList<String> supervisors = benchmark.getSupervisors();
 		
 		System.out.println("Starting Storm UI...");
-		UILauncher uil = new UILauncher(os);
+		String uiPort = benchmark.getUiPort();
+		UILauncher uil = new UILauncher(os, benchHome, uiPort);
 		Thread threadUI = new Thread(uil);
-		//threadUI.setDaemon(true);
 		threadUI.start();
 		Thread.sleep(30000);
 		
@@ -65,9 +66,9 @@ public class Main {
 			
 			/*Launch the Nimbus*/
 			System.out.println("Running Nimbus with appropriate scheduler...");
-			NimbusLauncher nimbl = new NimbusLauncher(os);
+			String nimbusPort = benchmark.getNimbusPort();
+			NimbusLauncher nimbl = new NimbusLauncher(os, benchHome, nimbusPort);
 			Thread threadNimbus = new Thread(nimbl);
-			//threadNimbus.setDaemon(true);
 			threadNimbus.start();
 			
 			Thread.sleep(30000);
@@ -83,18 +84,18 @@ public class Main {
 			for(int j = 0; j < nbIterations; j++){
 			
 				/*Submit the topology*/
-				TopologySubmitter submitter = new TopologySubmitter(os, topology, stream, loadBalancer, distribution, skew);
+				TopologySubmitter submitter = new TopologySubmitter(os, benchHome, topology, stream, loadBalancer, distribution, skew);
 				Thread threadSubmit = new Thread(submitter);
 				threadSubmit.setDaemon(true);
 				threadSubmit.start();
 				Thread.sleep(10000);
 		
 				/*Wait n seconds*/
-				int iterDuration = benchmark.getDurationIter();
+				int iterDuration = benchmark.getIterDuration() * 1000; // convert seconds to milliseconds
 				Thread.sleep(iterDuration);
 		
 				/*Kill the topology*/
-				TopologyKiller killer = new TopologyKiller(os, topology);
+				TopologyKiller killer = new TopologyKiller(os, benchHome, topology);
 				Thread threadKiller = new Thread(killer);
 				threadKiller.setDaemon(true);
 				threadKiller.start();
@@ -108,8 +109,9 @@ public class Main {
 			String configName = config.getShortname();
 			LogManager logManager = new LogManager(os, dbHost, dbName, dbUser, dbPwd, configName);
 
+			System.out.println("Dumping logs for configuration " + i + " (" + configName + ")...");
 			logManager.dumpLogs();
-			System.out.println("Logs for configuration " + i + " (" + configName + ") dumped correctly");
+			
 			/*Clear the database*/
 			System.out.println("Clearing log database...");
 			logManager.clearLogs();

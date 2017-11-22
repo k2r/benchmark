@@ -15,11 +15,13 @@ import autoscale.benchmark.util.BufferPrinter;
 public class TopologyKiller implements Runnable {
 
 	private String os;
+	private String benchHome;
 	private String topology;
 	private static Logger logger = Logger.getLogger("TopologyKiller");
 	
-	public TopologyKiller(String os, String topology) {
+	public TopologyKiller(String os, String benchHome, String topology) {
 		this.setOs(os);
+		this.setBenchHome(benchHome);
 		this.setTopology(topology);
 	}
 	
@@ -35,6 +37,21 @@ public class TopologyKiller implements Runnable {
 	public final void setOs(String os) {
 		this.os = os;
 	}
+	
+	/**
+	 * @return the benchHome
+	 */
+	public String getBenchHome() {
+		return benchHome;
+	}
+
+	/**
+	 * @param benchHome the stormHome to set
+	 */
+	public void setBenchHome(String benchHome) {
+		this.benchHome = benchHome;
+	}
+
 	/**
 	 * @return the topology
 	 */
@@ -53,18 +70,16 @@ public class TopologyKiller implements Runnable {
 	 */
 	@Override
 	public void run() {
-		File dir = null;
+		File dir = new File(this.getBenchHome() + "apache-storm-1.0.2/");
 		ProcessBuilder builder = null;
 		Process p;
 		try{
 			String os = this.getOs();
 			if(os.equalsIgnoreCase("windows")){
-				dir = new File("C:/These/D3/Github/benchmark/apache-storm-1.0.2/");
-				builder = new ProcessBuilder("cmd", "/C", "storm", "kill", this.getTopology());
+				builder = new ProcessBuilder("cmd", "/C", "storm", "kill", this.getTopology(), "-w" , "0");
 			}
 			if(os.equalsIgnoreCase("unix")){
-				dir = new File("/home/ubuntu/apache-storm-1.0.2/");
-				builder = new ProcessBuilder("bash", "./bin/storm", "kill", this.getTopology());
+				builder = new ProcessBuilder("bash", "./bin/storm", "kill", this.getTopology(), "-w" , "0");
 			}
 			builder.directory(dir);
 			builder.inheritIO();

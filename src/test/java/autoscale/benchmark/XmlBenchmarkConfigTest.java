@@ -70,7 +70,7 @@ public class XmlBenchmarkConfigTest {
 	 */
 	@Test
 	public void testSetDurationIter() {
-		Integer actual = config.getDurationIter();
+		Integer actual = config.getIterDuration();
 		Integer expected = 15;
 		
 		assertEquals(expected, actual, 0);
@@ -81,8 +81,8 @@ public class XmlBenchmarkConfigTest {
 	 */
 	@Test
 	public void testSetNimbus() {
-		String actual = config.getNimbus();
-		String expected = "127.0.0.1";
+		String actual = config.getNimbusPort();
+		String expected = "6627";
 		assertEquals(expected, actual);
 	}
 

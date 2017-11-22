@@ -16,13 +16,15 @@ import autoscale.benchmark.util.PIDFinder;
 public class UILauncher implements Runnable {
 
 	private String os;
+	private String benchHome;
+	private String uiPort;
 	private Process process;
 	private static Logger logger = Logger.getLogger("UILauncher"); 
 	
-	
-	
-	public UILauncher(String os) {
+	public UILauncher(String os, String benchHome, String uiPort) {
 		this.setOs(os);
+		this.setBenchHome(benchHome);
+		this.setUiPort(uiPort);
 	}
 	
 	/**
@@ -39,16 +41,45 @@ public class UILauncher implements Runnable {
 		this.os = os;
 	}
 	
+	/**
+	 * @return the benchHome
+	 */
+	public String getBenchHome() {
+		return benchHome;
+	}
+
+	/**
+	 * @param benchHome the benchHome to set
+	 */
+	public void setBenchHome(String benchHome) {
+		this.benchHome = benchHome;
+	}
+
+	/**
+	 * @return the uiPort
+	 */
+	public String getUiPort() {
+		return uiPort;
+	}
+
+	/**
+	 * @param uiPort the uiPort to set
+	 */
+	public void setUiPort(String uiPort) {
+		this.uiPort = uiPort;
+	}
+
 	public void killUIProcess(){
 		ProcessBuilder builder = null;
 		Process p = null;
 		try{
 			String os = this.getOs();
+			String pid = PIDFinder.getPID(os, this.getUiPort()).toString();
 			if(os.equalsIgnoreCase("windows")){
-				builder = new ProcessBuilder("cmd.exe", "/C", "kill", "-9", PIDFinder.getPID(os, "5371").toString());
+				builder = new ProcessBuilder("cmd.exe", "/C", "kill", "-9", pid);
 			}
 			if(os.equalsIgnoreCase("unix")){
-				builder = new ProcessBuilder("sudo", "kill", "-9", PIDFinder.getPID(os, "5371").toString());
+				builder = new ProcessBuilder("sudo", "kill", "-9", pid);
 			}
 			System.out.println("Stopping the UI...");
 			p = builder.start();
@@ -63,16 +94,14 @@ public class UILauncher implements Runnable {
 	 */
 	@Override
 	public void run() {
-		File dir = null;
+		File dir = new File(this.getBenchHome());
 		ProcessBuilder builder = null;
 		try{
 			String os = this.getOs();
 			if(os.equalsIgnoreCase("windows")){
-				dir = new File("C:/These/D3/Github/benchmark/");
 				builder = new ProcessBuilder("cmd.exe", "/C", "storm", "ui");
 			}
 			if(os.equalsIgnoreCase("unix")){
-				dir = new File("/home/ubuntu/");
 				builder = new ProcessBuilder("bash", "./apache-storm-1.0.2/bin/storm", "ui");
 			}
 			builder.directory(dir);
