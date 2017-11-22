@@ -57,7 +57,10 @@ public class NimbusLauncher implements Runnable {
 		try{
 			String os = this.getOs();
 			if(os.equalsIgnoreCase("windows")){
-				builder = new ProcessBuilder("cmd.exe", "/C", "kill", "-9", PIDFinder.getPID(os, "6627"));
+				builder = new ProcessBuilder("cmd.exe", "/C", "kill", "-9", PIDFinder.getPID(os, "6627").toString());
+			}
+			if(os.equalsIgnoreCase("unix")){
+				builder = new ProcessBuilder("sudo", "kill", "-9", PIDFinder.getPID(os, "6627").toString());
 			}
 			System.out.println("Stopping the nimbus...");
 			p = builder.start();

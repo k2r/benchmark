@@ -45,7 +45,10 @@ public class UILauncher implements Runnable {
 		try{
 			String os = this.getOs();
 			if(os.equalsIgnoreCase("windows")){
-				builder = new ProcessBuilder("cmd.exe", "/C", "kill", "-9", PIDFinder.getPID(os, "5371"));
+				builder = new ProcessBuilder("cmd.exe", "/C", "kill", "-9", PIDFinder.getPID(os, "5371").toString());
+			}
+			if(os.equalsIgnoreCase("unix")){
+				builder = new ProcessBuilder("sudo", "kill", "-9", PIDFinder.getPID(os, "5371").toString());
 			}
 			System.out.println("Stopping the UI...");
 			p = builder.start();

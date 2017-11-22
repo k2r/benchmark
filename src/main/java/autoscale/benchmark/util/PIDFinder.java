@@ -30,6 +30,9 @@ public class PIDFinder {
 			if(os.equalsIgnoreCase("windows")){
 				builder = new ProcessBuilder("cmd.exe", "/C", "netstat", "-a", "-o", "-n", "|", "findstr", port);
 			}
+			if(os.equalsIgnoreCase("unix")){
+				builder = new ProcessBuilder("ps", "-ef", "|", "grep", "name=nimbus");
+			}
 			p = builder.start();
 			BufferedReader br = getBufferedReader(p.getInputStream());
 	        String line = "";
@@ -46,13 +49,25 @@ public class PIDFinder {
 		return result;
 	}
 	
-	public static String getPID(String os, String port){
-		String result = "";
-		ArrayList<String> nimbusConnections = getConnections(os, port);
-		String[] info = nimbusConnections.get(0).split(" ");
+	public static Integer getPID(String os, String port){
+		Integer result = null;
+		ArrayList<String> connections = getConnections(os, port);
+		String[] info = connections.get(0).split(" ");
 		int lastIndex = info.length - 1;
 		if(os.equalsIgnoreCase("windows")){
-			result = info[lastIndex];
+			result = Integer.parseInt(info[lastIndex]);
+		}
+		if(os.equalsIgnoreCase("unix")){
+			for(int i = 0; i < lastIndex; i++){
+				try{
+					Integer pid = Integer.parseInt(info[i]);
+					result = pid;
+					break;
+				}catch(NumberFormatException e){
+					logger.fine("Not the expected PID");
+				}
+				
+			}
 		}
 		return result;
 	}
