@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><parameters>
 	<!--Identifier of the topology-->
-	<topology_id>OpinionMine</topology_id>
+	<topology_id>complexSensitive</topology_id>
 	
 	<!--Port to receive source stream-->
 	<stream_port>5354</stream_port>

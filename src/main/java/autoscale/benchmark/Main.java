@@ -99,6 +99,7 @@ public class Main {
 				Thread threadKiller = new Thread(killer);
 				threadKiller.setDaemon(true);
 				threadKiller.start();
+				Thread.sleep(15000);
 			}
 			
 			/*After n iterations, dump the database*/

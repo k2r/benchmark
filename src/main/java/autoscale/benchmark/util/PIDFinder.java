@@ -22,16 +22,16 @@ public class PIDFinder {
         return new BufferedReader(new InputStreamReader(is));
     }
 	
-	public static ArrayList<String> getConnections(String os, String port){
+	public static ArrayList<String> getConnections(String os, String identifier){
 		ArrayList<String> result = new ArrayList<>();
 		ProcessBuilder builder = null;
 		Process p = null;
 		try{
 			if(os.equalsIgnoreCase("windows")){
-				builder = new ProcessBuilder("cmd.exe", "/C", "netstat", "-a", "-o", "-n", "|", "findstr", port);
+				builder = new ProcessBuilder("cmd.exe", "/C", "netstat", "-a", "-o", "-n", "|", "findstr", identifier);
 			}
 			if(os.equalsIgnoreCase("unix")){
-				builder = new ProcessBuilder("ps", "-ef", "|", "grep", "name=nimbus");
+				builder = new ProcessBuilder("/bin/sh", "-c", "sudo netstat -nlp | grep " + identifier);
 			}
 			p = builder.start();
 			BufferedReader br = getBufferedReader(p.getInputStream());
@@ -43,8 +43,9 @@ public class PIDFinder {
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
+	        p.waitFor();
 		}catch(Exception e){
-			logger.severe("Cannot find nimbus PID because " + e);
+			logger.severe("Cannot find PID because " + e);
 		}
 		return result;
 	}
@@ -58,16 +59,7 @@ public class PIDFinder {
 			result = Integer.parseInt(info[lastIndex]);
 		}
 		if(os.equalsIgnoreCase("unix")){
-			for(int i = 0; i < lastIndex; i++){
-				try{
-					Integer pid = Integer.parseInt(info[i]);
-					result = pid;
-					break;
-				}catch(NumberFormatException e){
-					logger.fine("Not the expected PID");
-				}
-				
-			}
+			result = Integer.parseInt(info[lastIndex].split("/")[0]);
 		}
 		return result;
 	}
