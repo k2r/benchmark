@@ -177,8 +177,8 @@ public class LogManager {
 						+ this.getDbPwd(), "autoscale", ">", this.root + this.getConfigName() + ".sql");
 			}
 			if(os.equalsIgnoreCase("unix")){
-				builder = new ProcessBuilder("sudo", "mysqldump", "-h", this.getDbHost(), "-u", this.getDbUser(), "-p" 
-						+ this.getDbPwd(), "autoscale", ">", this.root + this.getConfigName() + ".sql");
+				builder = new ProcessBuilder("/bin/sh", "-c", "sudo mysqldump -h " + this.getDbHost() + " -u " + this.getDbUser()
+						+ " -p" + this.getDbPwd() + " autoscale > " + this.root + this.getConfigName() + ".sql");
 			}
 			p = builder.start();
 			BufferPrinter outputStream = new BufferPrinter(p.getInputStream());
